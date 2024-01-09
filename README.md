@@ -1,2 +1,2 @@
-# EmbySessionLogging
+### EmbySessionLogging
 EmbySessionLogging
