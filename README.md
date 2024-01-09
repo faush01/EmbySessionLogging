@@ -1,0 +1,2 @@
+# EmbySessionLogging
+EmbySessionLogging
