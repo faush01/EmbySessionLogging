@@ -3,14 +3,21 @@ import requests
 import sqlite3
 from contextlib import closing
 import time
+from datetime import datetime, timezone
 import json
 
 emby_url = "http://localhost:8096"
 
 def session_info(sessions):
-    s_info = {"t": 0, "p": 0, "vt": 0, "at": 0}
+    s_info = {"as": 0, "p": 0, "vt": 0, "at": 0, "hvd": 0, "hve": 0}
     for session in sessions:
-        s_info["t"] += 1
+        #print(session)
+        last_active = session["LastActivityDate"]  # "2020-07-18T04:08:53.1184838Z" "2024-01-13T02:40:01.2405182Z"
+        last_active = last_active[0: last_active.index(".")] + "+0000"
+        last_active = datetime.strptime(last_active, '%Y-%m-%dT%H:%M:%S%z')
+        last_active_ago = (datetime.now(timezone.utc) - last_active).total_seconds()
+        if last_active_ago < (5 * 60):
+            s_info["as"] += 1
         if session.get("NowPlayingItem"):
             s_info["p"] += 1
             transcoding_info = session.get("TranscodingInfo")
@@ -19,6 +26,10 @@ def session_info(sessions):
                     s_info["vt"] += 1
                 if transcoding_info.get("IsAudioDirect") is False:
                     s_info["at"] += 1
+                if transcoding_info.get("VideoDecoderIsHardware"):
+                    s_info["hvd"] += 1
+                if transcoding_info.get("VideoEncoderIsHardware"):
+                    s_info["hve"] += 1
     return s_info
 
 def log_session_info(s_info):
