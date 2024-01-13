@@ -1,7 +1,10 @@
 ## EmbySessionLogging
 
-Emby server session logging will allow you to mointor what is happening on your Emby server. 
+Emby server session logging will allow you to monitor what is happening on your Emby server. 
 This can help detect load issues and overall server health. 
+Once you have session logging set up you can view the data in graphinc tools like Grafana.
+
+![Gragana Chart](https://raw.githubusercontent.com/faush01/EmbySessionLogging/main/media/graph.png)
 
 ### Run the logging script
 
